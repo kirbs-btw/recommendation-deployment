@@ -10,9 +10,7 @@ def recommend_from_id():
         if not data:
             return jsonify({'error': 'No JSON data received'}), 400
         
-        # takes a song id
-        # returns a list of song_names, artis_name and id of the recommended songs 
-        return_data = {}
+        return_data = {"hello im docker": ""}  # Placeholder for recommendation logic
 
         return jsonify({'processed_data': return_data}), 200
     
@@ -27,9 +25,7 @@ def recommend_from_id_list():
         if not data:
             return jsonify({'error': 'No JSON data received'}), 400
         
-        # takes a list of ids aka playlist from the user 
-        # returns a list of song_names, artis_name and id of the recommended songs
-        return_data = {}
+        return_data = {}  # Placeholder for recommendation logic
         
         return jsonify({'processed_data': return_data}), 200
     
@@ -37,19 +33,14 @@ def recommend_from_id_list():
         return jsonify({'error': str(e)}), 500
 
 @app.route('/search/from_str', methods=['POST'])
-def recommend_from_id_list():
+def search_from_str():
     try:
         data = request.get_json()
         
         if not data:
             return jsonify({'error': 'No JSON data received'}), 400
         
-        # takes the inputed data from the user 
-        # and show the most fitting songs to the search to add a song 
-        # the autocomplete takes way to long with a bigger dataframe
-        # need to implement a new section to show the search results 
-        # after pressing search for the user
-        return_data = {}
+        return_data = {}  # Placeholder for search logic
         
         return jsonify({'processed_data': return_data}), 200
     
