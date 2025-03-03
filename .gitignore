@@ -1,2 +1,22 @@
 venv
 app_utils/*
+setup/data/*
+db/*
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+.env/
+
+# Logs and debug output
+*.log
+
+# Byte-compiled files
+*.pyc
+*.pyo
+*.pyd
+
+paper/*
+
+# Cache directories
+__pycache__/
+*.pytest_cache/
