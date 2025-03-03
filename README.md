@@ -1,7 +1,4 @@
 # recommendation-deployment
-
-
-
 ## container setup
 ```sh
 docker build -t recommendation-api . 
