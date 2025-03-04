@@ -13,5 +13,5 @@ docker run -p 5000:5000 recommendation-api
 Invoke-WebRequest -Uri "http://127.0.0.1:5000/recommend/from_id" `
     -Method Post `
     -Headers @{"Content-Type"="application/json"} `
-    -Body '{"name": "john", "age": 25}'
+    -Body '{"id": "All Be Okay Lissie"}'
 ```

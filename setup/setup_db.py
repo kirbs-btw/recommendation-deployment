@@ -13,7 +13,6 @@ def main():
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
-    
     # creating table in the db
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS songs (
@@ -35,7 +34,6 @@ def main():
 
     conn.commit()
     conn.close()
-    # testing the ingested data
     print("---FINISHED---")
     
 if __name__ == '__main__':
