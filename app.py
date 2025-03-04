@@ -1,17 +1,24 @@
 from flask import Flask, request, jsonify
-import app_utils
+from app_utils import get_recommendation_from_id, get_recommendation_from_id_list, get_search_from_str
 
 app = Flask(__name__)
 
 @app.route('/recommend/from_id', methods=['POST'])
 def recommend_from_id():
+    """
+    {
+        "id": "my_id"
+    }
+    """
     try:
         data = request.get_json()
         
         if not data:
             return jsonify({'error': 'No JSON data received'}), 400
         
-        return_data = {"hello im docker": ""}  # Placeholder for recommendation logic
+        # prep data
+        id: str = data['id']
+        return_data: dict = get_recommendation_from_id(id)
 
         return jsonify({'processed_data': return_data}), 200
     
@@ -20,13 +27,24 @@ def recommend_from_id():
 
 @app.route('/recommend/from_id_list', methods=['POST'])
 def recommend_from_id_list():
+    """
+    {
+        "ids": [
+            "id_1",
+            "id_2",
+            "id_3"
+        ]
+    }
+    """
     try:
         data = request.get_json()
         
         if not data:
             return jsonify({'error': 'No JSON data received'}), 400
         
-        return_data = {}  # Placeholder for recommendation logic
+        # parse data
+        ids: list = data['ids']
+        return_data: dict = get_recommendation_from_id_list(ids)
         
         return jsonify({'processed_data': return_data}), 200
     
@@ -35,13 +53,20 @@ def recommend_from_id_list():
 
 @app.route('/search/from_str', methods=['POST'])
 def search_from_str():
+    """
+    api call: 
+    {
+        "search_input": "the songs I'm searching"
+    }
+    """
     try:
         data = request.get_json()
         
         if not data:
             return jsonify({'error': 'No JSON data received'}), 400
         
-        return_data = {}  # Placeholder for search logic
+        search_str: str = data['search_input']
+        return_data: dict = get_search_from_str(search_str) 
         
         return jsonify({'processed_data': return_data}), 200
     

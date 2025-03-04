@@ -2,6 +2,7 @@ venv
 app_utils/*
 setup/data/*
 db/*
+model/*
 
 # Jupyter Notebook checkpoints
 .ipynb_checkpoints/
