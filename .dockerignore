@@ -5,5 +5,5 @@ __pycache__/
 venv/
 .env
 .DS_Store
-setup
-test/
+setup/
+test_app.py
