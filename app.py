@@ -1,8 +1,10 @@
 from flask import Flask, request, jsonify
 from app_utils import ModelHandler, get_data_from_ids, get_data_to_id, get_search_from_str
 from werkzeug.exceptions import UnsupportedMediaType
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 MODEL_HANDLER = ModelHandler()
 
@@ -64,7 +66,6 @@ def recommend_from_id_list():
 
 @app.route('/search/from_str', methods=['POST'])
 def search_from_str():
-    print("flksjfklsjkjskj")
     """
     api call: 
     {
@@ -77,10 +78,9 @@ def search_from_str():
             return jsonify({'error': 'No JSON data received'}), 400
         
         search_str: str = data['search_input']
-        print("fklsjfklsjfkljsfklsj")
         return_data: dict = get_search_from_str(search_str) 
         
-        return jsonify({'processed_data': return_data}), 200
+        return jsonify(return_data), 200
     
     except UnsupportedMediaType as e:
         # no JSON got send
