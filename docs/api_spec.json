@@ -1,0 +1,165 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Music Recommendation API",
+        "version": "1.0.0",
+        "description": "API for getting music recommendations and searching tracks/artists."
+    },
+    "paths": {
+        "/recommend/from_id": {
+            "post": {
+                "summary": "Get recommendations based on a single track ID",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": ["id"],
+                                "properties": {
+                                    "id": {
+                                        "type": "string",
+                                        "example": "track123"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Recommendation results",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RecommendationResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request or unsupported media type"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/recommend/from_id_list": {
+            "post": {
+                "summary": "Get recommendations based on a list of track IDs",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": ["ids"],
+                                "properties": {
+                                    "ids": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        },
+                                        "example": ["track123", "track456", "track789"]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Recommendation results",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RecommendationResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request or unsupported media type"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/search/from_str": {
+            "post": {
+                "summary": "Search for tracks or artists by string input",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": ["search_input"],
+                                "properties": {
+                                    "search_input": {
+                                        "type": "string",
+                                        "example": "Imagine Dragons"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Search results",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RecommendationResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request or unsupported media type"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "RecommendationItem": {
+                "type": "object",
+                "properties": {
+                    "artist": {
+                        "type": "string",
+                        "example": "The Beatles"
+                    },
+                    "trackname": {
+                        "type": "string",
+                        "example": "Hey Jude"
+                    },
+                    "id": {
+                        "type": "string",
+                        "example": "beatles_heyjude"
+                    }
+                }
+            },
+            "RecommendationResponse": {
+                "type": "object",
+                "properties": {
+                    "results": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/RecommendationItem"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

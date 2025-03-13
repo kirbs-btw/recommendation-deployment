@@ -7,3 +7,4 @@ venv/
 .DS_Store
 setup/
 test_app.py
+docs

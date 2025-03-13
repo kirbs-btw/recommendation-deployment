@@ -50,12 +50,12 @@ def recommend_from_id_list():
         
         if not data:
             return jsonify({'error': 'No JSON data received'}), 400
-        
+
         # parse data
         ids: list = data['ids']
+        # do stuff
         return_data: dict = MODEL_HANDLER.get_recommendation_from_id_list(ids)
-        
-        return jsonify({'processed_data': return_data}), 200
+        return jsonify(return_data), 200
     
     except UnsupportedMediaType as e:
         # no JSON got send
