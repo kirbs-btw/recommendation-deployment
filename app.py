@@ -1,41 +1,51 @@
-from flask import Flask, request, jsonify
-from app_utils import ModelHandler, get_data_from_ids, get_data_to_id, get_search_from_str
-from werkzeug.exceptions import UnsupportedMediaType
-from flask_cors import CORS
+from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
+from fastapi.middleware.cors import CORSMiddleware
+from app_utils import ModelHandler, get_search_from_str
+# If you still need these, keep them:
+# from app_utils import get_data_from_ids, get_data_to_id
+# but based on the snippet, they're not explicitly referenced.
 
-app = Flask(__name__)
-CORS(app)
+# Create the FastAPI app
+app = FastAPI()
 
+# Enable CORS (similar to Flask-CORS)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Instantiating the model handler as before
 MODEL_HANDLER = ModelHandler()
 
-@app.route('/recommend/from_id', methods=['POST'])
-def recommend_from_id():
+@app.post("/recommend/from_id")
+async def recommend_from_id(request: Request):
     """
     {
         "id": "my_id"
     }
     """
     try:
-        data = request.get_json()
+        data = await request.json()
         
         if not data:
-            return jsonify({'error': 'No JSON data received'}), 400
+            return JSONResponse({'error': 'No JSON data received'}, status_code=400)
         
         # prep data
         id: str = data['id']
         return_data: dict = MODEL_HANDLER.get_recommendation_from_id(id)
 
-        return jsonify({'processed_data': return_data}), 200
+        return JSONResponse({'processed_data': return_data}, status_code=200)
     
-    except UnsupportedMediaType as e:
-        # no JSON got send
-        return jsonify({'error': str(e)}), 400
-
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        # any internal error
+        return JSONResponse({'error': str(e)}, status_code=500)
 
-@app.route('/recommend/from_id_list', methods=['POST'])
-def recommend_from_id_list():
+@app.post("/recommend/from_id_list")
+async def recommend_from_id_list(request: Request):
     """
     {
         "ids": [
@@ -46,26 +56,22 @@ def recommend_from_id_list():
     }
     """
     try:
-        data = request.get_json()
+        data = await request.json()
         
         if not data:
-            return jsonify({'error': 'No JSON data received'}), 400
+            return JSONResponse({'error': 'No JSON data received'}, status_code=400)
 
         # parse data
         ids: list = data['ids']
         # do stuff
         return_data: dict = MODEL_HANDLER.get_recommendation_from_id_list(ids)
-        return jsonify(return_data), 200
+        return JSONResponse(return_data, status_code=200)
     
-    except UnsupportedMediaType as e:
-        # no JSON got send
-        return jsonify({'error': str(e)}), 400
-
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        return JSONResponse({'error': str(e)}, status_code=500)
 
-@app.route('/search/from_str', methods=['POST'])
-def search_from_str():
+@app.post("/search/from_str")
+async def search_from_str(request: Request):
     """
     api call: 
     {
@@ -73,23 +79,26 @@ def search_from_str():
     }
     """
     try:
-        data = request.get_json()
+        data = await request.json()
         if not data:
-            return jsonify({'error': 'No JSON data received'}), 400
+            return JSONResponse({'error': 'No JSON data received'}, status_code=400)
         
         search_str: str = data['search_input']
-        return_data: dict = get_search_from_str(search_str) 
+        return_data: dict = get_search_from_str(search_str)
         
-        return jsonify(return_data), 200
+        return JSONResponse(return_data, status_code=200)
     
-    except UnsupportedMediaType as e:
-        # no JSON got send
-        return jsonify({'error': str(e)}), 400
-
     except Exception as e:
-        # any internal error
-        return jsonify({'error': str(e)}), 500
+        return JSONResponse({'error': str(e)}, status_code=500)
 
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+# To run locally:
+#   uvicorn main:app --host 0.0.0.0 --port 5000 --reload
+# Or you can include a main block below:
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(
+        app, 
+        host="0.0.0.0", 
+        port=5000, 
+        reload=True
+    )
