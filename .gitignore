@@ -3,6 +3,7 @@ app_utils/*
 setup/data/*
 db/*
 model/*
+setup/data
 
 # Jupyter Notebook checkpoints
 .ipynb_checkpoints/
@@ -21,3 +22,5 @@ paper/*
 # Cache directories
 __pycache__/
 *.pytest_cache/
+
+.env
