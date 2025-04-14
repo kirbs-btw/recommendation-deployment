@@ -1,10 +1,16 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, HTTPException
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from app_utils import ModelHandler, get_search_from_str
+from dotenv import load_dotenv
+import os
 # If you still need these, keep them:
 # from app_utils import get_data_from_ids, get_data_to_id
 # but based on the snippet, they're not explicitly referenced.
+
+load_dotenv()
+
+API_KEY = os.getevn("API_KEY")
 
 # Create the FastAPI app
 app = FastAPI()
@@ -20,6 +26,13 @@ app.add_middleware(
 
 # Instantiating the model handler as before
 MODEL_HANDLER = ModelHandler()
+
+@app.middleware("http")
+async def verify_api_key(request: Request, call_next):
+    request_api_key = request.headers.get("X-API-Key")
+    if request_api_key != API_KEY:
+        raise HTTPException(status_code=401, detail="Invalid API Key")
+    return await call_next(request)
 
 @app.post("/recommend/from_id")
 async def recommend_from_id(request: Request):
