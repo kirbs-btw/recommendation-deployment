@@ -12,10 +12,8 @@ load_dotenv()
 
 API_KEY = os.getevn("API_KEY")
 
-# Create the FastAPI app
 app = FastAPI()
 
-# Enable CORS (similar to Flask-CORS)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -24,7 +22,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Instantiating the model handler as before
 MODEL_HANDLER = ModelHandler()
 
 @app.middleware("http")
@@ -47,7 +44,6 @@ async def recommend_from_id(request: Request):
         if not data:
             return JSONResponse({'error': 'No JSON data received'}, status_code=400)
         
-        # prep data
         id: str = data['id']
         return_data: dict = MODEL_HANDLER.get_recommendation_from_id(id)
 
@@ -76,7 +72,6 @@ async def recommend_from_id_list(request: Request):
 
         # parse data
         ids: list = data['ids']
-        # do stuff
         return_data: dict = MODEL_HANDLER.get_recommendation_from_id_list(ids)
         return JSONResponse(return_data, status_code=200)
     
