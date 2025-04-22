@@ -8,4 +8,4 @@ services:
     volumes:
       - .:/app
     environment:
-      - FLASK_ENV=production
+      - API_KEY=thisistheapikey

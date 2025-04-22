@@ -8,7 +8,7 @@ docker build -t recommendation-api .
 ```
 
 ```sh
-docker run -p 5000:5000 recommendation-api
+docker run -e API_KEY=thisistheapikey -p 5000:5000 recommendation-api
 ```
 
 ## test

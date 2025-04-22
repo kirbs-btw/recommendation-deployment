@@ -10,7 +10,8 @@ import os
 
 load_dotenv()
 
-API_KEY = os.getevn("API_KEY")
+
+API_KEY = os.getenv("API_KEY")
 
 app = FastAPI()
 
@@ -26,6 +27,10 @@ MODEL_HANDLER = ModelHandler()
 
 @app.middleware("http")
 async def verify_api_key(request: Request, call_next):
+    if request.method == "OPTIONS":
+        # Preflight request, skip API key check
+        return await call_next(request)
+    
     request_api_key = request.headers.get("X-API-Key")
     if request_api_key != API_KEY:
         raise HTTPException(status_code=401, detail="Invalid API Key")
